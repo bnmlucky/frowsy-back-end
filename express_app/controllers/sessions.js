@@ -12,6 +12,7 @@ router.post("/", (req, res) => {
     if (bcrypt.compareSync(req.body.password, foundUser.password)) {
       // console.log("found", foundUser);
       req.session.currentUser = foundUser;
+      console.log("session started");
       res.status(200).json({ foundUser });
     } else {
       res.status(400).json({ error: err.message });
@@ -20,8 +21,13 @@ router.post("/", (req, res) => {
 });
 //DELETE
 router.delete("/", (req, res) => {
-  req.session.destroy(() => {
-    console.log("session ended");
+  req.session.destroy(error => {
+    if (error) {
+      res.status(400).json({ error: error.message });
+    } else {
+      res.status(200).json({ message: "session ended" });
+    }
+    // console.log("session destroyed");
   });
 });
 //EXPORTS
