@@ -22,7 +22,7 @@ const tasksController = require("./controllers/tasks.js");
 const sessionController = require("./controllers/sessions.js");
 
 //WHITELIST
-const whitelist = ["http://localhost:3000"];
+const whitelist = ["http://localhost:3000", "http://localhost:3003"];
 const corsOptions = {
   origin: (origin, callback) => {
     if (whitelist.indexOf(origin) !== -1) {
@@ -33,7 +33,7 @@ const corsOptions = {
   }
 };
 app.use(express.json());
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 app.use("/users", usersController);
 app.use("./tasks", tasksController);
 app.use("/sessions", sessionController);
