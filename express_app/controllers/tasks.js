@@ -25,9 +25,7 @@ router.post("/:id", (req, res) => {
       },
       { new: true },
       (error, updatedUser) => {
-        console.log("this is id:" + req.params.id);
-        console.log("updated user:" + updatedUser);
-        console.log(error);
+        console.log(updatedUser);
       }
     );
     if (err) {
@@ -36,26 +34,18 @@ router.post("/:id", (req, res) => {
     res.status(200).send(createdTask);
   });
 });
-// router.post("/", (req, res) => {
-//   console.log(req.body);
-//   Tasks.create(req.body, (err, createdTask) => {
-//     if (err) {
-//       res.status(400).json({ error: err.message });
-//     }
-//     res.status(200).send(createdTask);
-//   });
-// });
+
 /********   DELETE   ************/
-router.delete("/:id", (req, res) => {
+router.delete("/:userid/:taskid", (req, res) => {
   const tasksArray = req.body.user.tasks.filter(task => {
-    if (task._id == req.params.id) {
+    if (task._id == req.params.taskid) {
       console.log("matched");
     } else {
       return task;
     }
   });
   User.update(
-    { _id: req.session.currentUser._id },
+    { _id: req.params.userid },
     {
       $set: { tasks: tasksArray }
     },
@@ -68,7 +58,7 @@ router.delete("/:id", (req, res) => {
       }
     }
   );
-  Tasks.findByIdAndRemove(req.params.id, (err, deletedTask) => {
+  Tasks.findByIdAndRemove(req.params.taskid, (err, deletedTask) => {
     if (err) {
       res.status(400).json({ error: err.message });
     }
@@ -76,47 +66,48 @@ router.delete("/:id", (req, res) => {
   });
 });
 /********   UPDATE    ************/
-router.put("/:id", (req, res) => {
-  const tasksArray = req.session.currentUser.tasks.map(task => {
-    if (task._id == req.params.id) {
-      return {
-        _id: req.params.id,
-        description: req.body.description,
-        progress: req.body.assigned,
-        __v: 0
-      };
-    } else {
-      return task;
-    }
-  });
-  User.update(
-    {
-      _id: req.body.user
-    },
-    {
-      $set: { tasks: tasksArray }
-    },
-    { new: true },
-    (error, updatedUser) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(updatedUser);
-      }
-    }
-  );
-  Tasks.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    { new: true },
-    (err, updatedTask) => {
-      if (err) {
-        res.status(400).json({ error: err.message });
-      }
-      res.status(200).json(updatedTask);
-    }
-  );
-});
+//going to have to think more about update route
+// router.put("/:taskid", (req, res) => {
+//   const tasksArray = req.body.tasks.map(task => {
+//     if (task._id == req.params.taskid) {
+//       return {
+//         _id: req.params.id,
+//         description: req.body.description,
+//         progress: req.body.assigned,
+//         __v: 0
+//       };
+//     } else {
+//       return task;
+//     }
+//   });
+//   User.update(
+//     {
+//       _id: req.body.user
+//     },
+//     {
+//       $set: { tasks: tasksArray }
+//     },
+//     { new: true },
+//     (error, updatedUser) => {
+//       if (error) {
+//         console.log(error);
+//       } else {
+//         console.log(updatedUser);
+//       }
+//     }
+//   );
+//   Tasks.findByIdAndUpdate(
+//     req.params.id,
+//     req.body,
+//     { new: true },
+//     (err, updatedTask) => {
+//       if (err) {
+//         res.status(400).json({ error: err.message });
+//       }
+//       res.status(200).json(updatedTask);
+//     }
+//   );
+// });
 //EXPORTS
 module.exports = router;
 
