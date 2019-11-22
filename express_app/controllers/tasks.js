@@ -17,9 +17,9 @@ router.get("/", (req, res) => {
 /********   CREATE   ************/
 router.post("/", (req, res) => {
   console.log(req.body);
-  Tasks.create(req.body, (err, createdTask) => {
+  Tasks.create(req.body.tasks, (err, createdTask) => {
     User.findByIdAndUpdate(
-      req.session.currentUser._id,
+      req.body.user,
       {
         $push: { tasks: createdTask }
       },
