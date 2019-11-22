@@ -14,18 +14,20 @@ router.get("/", (req, res) => {
     res.status(200).json({ foundTasks });
   });
 });
+
 /********   CREATE   ************/
-router.post("/", (req, res) => {
-  console.log(req.body);
-  Tasks.create(req.body.tasks, (err, createdTask) => {
+router.post("/:id", (req, res) => {
+  Tasks.create(req.body, (err, createdTask) => {
     User.findByIdAndUpdate(
-      req.body.user,
+      req.params.id,
       {
         $push: { tasks: createdTask }
       },
       { new: true },
       (error, updatedUser) => {
-        console.log("added task to user");
+        console.log("this is id:" + req.params.id);
+        console.log("updated user:" + updatedUser);
+        console.log(error);
       }
     );
     if (err) {
@@ -34,9 +36,18 @@ router.post("/", (req, res) => {
     res.status(200).send(createdTask);
   });
 });
+// router.post("/", (req, res) => {
+//   console.log(req.body);
+//   Tasks.create(req.body, (err, createdTask) => {
+//     if (err) {
+//       res.status(400).json({ error: err.message });
+//     }
+//     res.status(200).send(createdTask);
+//   });
+// });
 /********   DELETE   ************/
 router.delete("/:id", (req, res) => {
-  const tasksArray = req.session.currentUser.tasks.filter(task => {
+  const tasksArray = req.body.user.tasks.filter(task => {
     if (task._id == req.params.id) {
       console.log("matched");
     } else {
@@ -80,10 +91,10 @@ router.put("/:id", (req, res) => {
   });
   User.update(
     {
-      _id: req.session.currentUser._id
+      _id: req.body.user
     },
     {
-      $set: { user2chores: tasksArray }
+      $set: { tasks: tasksArray }
     },
     { new: true },
     (error, updatedUser) => {
