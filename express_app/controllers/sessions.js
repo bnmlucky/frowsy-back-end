@@ -12,7 +12,7 @@ router.post("/", (req, res) => {
     if (bcrypt.compareSync(req.body.password, foundUser.password)) {
       // console.log("found", foundUser);
       req.session.currentUser = foundUser;
-      console.log("session started");
+      // console.log("session started");
       res.status(200).json({ foundUser });
     } else {
       res.status(400).json({ error: err.message });

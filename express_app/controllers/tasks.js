@@ -37,7 +37,7 @@ router.post("/:id", (req, res) => {
 
 /********   DELETE   ************/
 router.delete("/:userid/:taskid", (req, res) => {
-  const tasksArray = req.body.user.tasks.filter(task => {
+  const tasksArray = req.params.userid.tasks.filter(task => {
     if (task._id == req.params.taskid) {
       console.log("matched");
     } else {

@@ -7,12 +7,12 @@ const bcrypt = require("bcrypt");
 //ROUTES
 
 //GET
-router.get("/", (req, res) => {
-  User.find({}, (err, foundUsers) => {
+router.get("/:id", (req, res) => {
+  User.findById(req.params.id, (err, foundUser) => {
     if (err) {
       res.status(400).json({ error: err.message });
     }
-    res.status(200).json({ foundUsers });
+    res.status(200).json({ foundUser });
   });
 });
 /********   CREATE   ************/
