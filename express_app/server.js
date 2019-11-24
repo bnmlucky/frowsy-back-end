@@ -5,6 +5,8 @@ const port = 3003;
 const mongoose = require("mongoose");
 const session = require("express-session");
 const cors = require("cors");
+const bodyParser = require("body-parser");
+
 //MIDDLEWARE
 
 //CONTROLLERS
@@ -34,6 +36,8 @@ const corsOptions = {
 };
 app.use(express.json());
 app.use(cors(corsOptions));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use("/users", usersController);
 app.use("/tasks", tasksController);
 app.use("/sessions", sessionController);
