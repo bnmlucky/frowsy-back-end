@@ -31,11 +31,7 @@ const tasksController = require("./controllers/tasks.js");
 const sessionController = require("./controllers/sessions.js");
 
 //WHITELIST
-const whitelist = [
-  "http://localhost:3000",
-  "http://localhost:3003",
-  "http://animated-nest.surge.sh"
-];
+const whitelist = ["*"];
 const corsOptions = {
   origin: (origin, callback) => {
     if (whitelist.indexOf(origin) !== -1) {
