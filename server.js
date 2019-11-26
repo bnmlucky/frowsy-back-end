@@ -1,13 +1,20 @@
 //DEPENDENCIES
 const express = require("express");
 const app = express();
-const port = 3003;
+const port = process.env.PORT || 3003;
 const mongoose = require("mongoose");
 const session = require("express-session");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 
 //MIDDLEWARE
+
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/DB_NAME";
+
+// Connect to Mongo
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true }, () => {
+  console.log("connected to mongo database");
+});
 
 //CONTROLLERS
 app.use(
